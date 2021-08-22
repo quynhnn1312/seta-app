@@ -1,68 +1,93 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Seta entrance test
 
-## Available Scripts
+## Website Demo: https://seta-app.netlify.app/
 
-In the project directory, you can run:
+## Install dependencies for app
 
-### `npm start`
+### `yarn install`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Run app localhost
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### `yarn run dev`
 
-### `npm test`
+## Build app to minify
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `yarn build`
 
-### `npm run build`
+============================================================================
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Javascript algorithm
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+1. Provide an array of strings, eg: [‘a’, ‘ab’, ‘abc’, ‘cd’, ‘def, ‘gh’]. Write a function to find the strings’ length that appear most in this array. Writing the unit test function and provide some test-cases. The result for example array is [‘ab’, ‘cd’, ‘gh’]
+2. Provide an array of integers, eg: [1, 4, 2, 3, 5]. Write a function to find sum of integers on top 2. Writing the unit test function and provide some test-cases. The result for the example array is 9
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### React
 
-### `npm run eject`
+Provide the API for posts: https://jsonplaceholder.typicode.com/posts
+Writing a react-redux app that:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Get and display posts from API
+- Have a PostForm component to add new post
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Solutions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### 1. Write a function to find the strings’ length that appear most in this array
+```
+  function calculateArrayString(arr) {
+    const error = "The input value must be an array of String!";
+    try {
+      arr = arr.replace(/'/g, '"');
+      arr = JSON.parse(arr);
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+      if (checkIsNotString(arr)) return error;
+    } catch (err) {
+      return error;
+    }
 
-## Learn More
+    const result = [];
+    const countOccurrencesObj = arr.reduce(
+      (prev, curr) => ((prev[curr.length] = ++prev[curr.length] || 1), prev),
+      {}
+    );
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    const maxValOccurrencesObj = Math.max(...Object.values(countOccurrencesObj));
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    Object.getOwnPropertyNames(countOccurrencesObj).forEach((key) => {
+      if (countOccurrencesObj[key] === maxValOccurrencesObj)
+        result.push(arr.filter((x) => x.length === +key));
+    });
 
-### Code Splitting
+    return result;
+  }
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+  function checkIsNotString(arr) {
+    let notString = false;
+    arr.find((item) => {
+      if (!(typeof item === "string")) {
+        notString = true;
+        return true;
+      }
+    });
 
-### Analyzing the Bundle Size
+    return notString;
+  }
+```
+#### 2. Write a function to find sum of integers on top 2
+```
+  function findSumIntegerOnTop2(arr) {
+    try {
+      arr = arr.replace(/'/g, '"');
+      arr = JSON.parse(arr);
+    } catch (err) {
+      return "The input value must be an array of Integer!";
+    }
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+    const [first, last] = arr
+      .filter((item) => Number.isInteger(+item))
+      .sort((a, b) => b - a);
 
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+    return first + last;
+  }
+```
+#### 3. React
+##### dependencies: react-redux, redux-toolkit, react-js-pagination, reactstrap, react-hook-form, axios
